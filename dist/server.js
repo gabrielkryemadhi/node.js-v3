@@ -20,6 +20,17 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port http://localhost:${port}`);
 });
-// app.get("/", (req, res) => {
-//   res.status(200).json({ msg: "Gato nero"})
-// })
+app.get("/api/planets", (req, res) => {
+    res.status(200).json(planets);
+});
+app.get("/api/planets/:id", (req, res) => {
+    const { id } = req.params;
+    const planet = planets.find((p) => p.id === Number(id));
+    res.status(200).json(planet);
+});
+app.post("/api/planets", (req, res) => {
+    const { id, name } = req.body;
+    const newPlanet = { id, name };
+    planets = [...planets, newPlanet];
+    res.status(200).json({ msg: "The planet was created." });
+});
