@@ -71,7 +71,7 @@ app.post("/api/planets", (req, res) => {
 
 // update a planet by id
 
-app.put("./api/planets/:id", (req, res) => {
+app.put("/api/planets/:id", (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
   planets = planets.map(p => p.id === Number(id) ? ({ ...p, name}) : p);
@@ -81,7 +81,7 @@ app.put("./api/planets/:id", (req, res) => {
   res.status(200).json({ msg: "The planet was updated"})
 })
 
-app.delete("./api/planets/:id", (req, res) => {
+app.delete("/api/planets/:id", (req, res) => {
   const { id } = req.params;
   planets = planets.filter(p => p.id !== Number(id));
 
