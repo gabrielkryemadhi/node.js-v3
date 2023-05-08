@@ -7,13 +7,11 @@ import {
   getOneById,
   create,
   updateById,
-  deleteById,
+  deleteByID,
   createImage,
-} from "./controllers.js";
+} from "./controllers/planets.js";
+import { logIn, singUp } from "./controllers/users.js";
 import multer from "multer";
-import * as dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT;
@@ -40,9 +38,12 @@ app.post("/api/planets", create);
 
 app.put("/api/planets/:id", updateById);
 
-app.delete("/api/planets/:id", deleteById);
+app.delete("/api/planets/:id", deleteByID);
 
 app.post("/api/planets/:id/image", upload.single("image"), createImage);
+
+app.post("/api/users/login", logIn);
+app.post("/api/users/singup", singUp);
 
 app.listen(port, () => {
   console.log(`Server listening on port http://localhost:${port}`);
