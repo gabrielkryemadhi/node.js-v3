@@ -7,11 +7,13 @@ import {
   getOneById,
   create,
   updateById,
-  deleteByID,
+  deleteById,
   createImage,
 } from "./controllers/planets.js";
-import { logIn, singUp } from "./controllers/users.js";
+import { logIn, singUp, logOut } from "./controllers/users.js";
+import authorize from "./authorize.js";
 import multer from "multer";
+import "./passport.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -38,12 +40,13 @@ app.post("/api/planets", create);
 
 app.put("/api/planets/:id", updateById);
 
-app.delete("/api/planets/:id", deleteByID);
+app.delete("/api/planets/:id", deleteById);
 
 app.post("/api/planets/:id/image", upload.single("image"), createImage);
 
 app.post("/api/users/login", logIn);
 app.post("/api/users/singup", singUp);
+app.get("/api/users/logout", authorize, logOut);
 
 app.listen(port, () => {
   console.log(`Server listening on port http://localhost:${port}`);
