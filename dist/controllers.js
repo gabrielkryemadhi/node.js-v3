@@ -10,13 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import joi from "joi";
 import pgPromise from "pg-promise";
 const db = pgPromise()("postgres://postgres:postgres@localhost:5432/postgres");
+console.log(db);
 const setupDb = () => __awaiter(void 0, void 0, void 0, function* () {
     yield db.none(`
         DROP TABLE IF EXISTS planets;
 
         CREATE TABLE planets (
             id SERIAL NOT NULL PRIMARY KEY,
-            name TEXT NOT NULL
+            name TEXT NOT NULL,
+            image TEXT
         );
     `);
     yield db.none(`INSERT INTO planets (name) VALUES ('Earth')`);
@@ -61,4 +63,16 @@ const deleteById = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     yield db.none(`DELETE FROM planets WHERE id=$1`, Number(id));
     res.status(200).json({ msg: "The planet was deleted" });
 });
-export { getAll, getOneById, create, updateById, deleteById };
+const createImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { id } = req.params;
+    const filename = (_a = req.file) === null || _a === void 0 ? void 0 : _a.path;
+    if (filename) {
+        db.none(`UPDATE planets SET image=$2 WHERE id=$1`, [id, filename]);
+        res.status(201).json({ msg: "Planet image uploaded successfully" });
+    }
+    else {
+        res.status(400).json({ msg: "Planet image failed to upload" });
+    }
+});
+export { getAll, getOneById, create, updateById, deleteById, createImage };
