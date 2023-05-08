@@ -2,7 +2,6 @@ import express from "express";
 import morgan from "morgan";
 import "express-async-errors";
 import "dotenv/config";
-import multer from "multer";
 import {
   getAll,
   getOneById,
@@ -11,9 +10,13 @@ import {
   deleteById,
   createImage,
 } from "./controllers.js";
+import multer from "multer";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./uploads");
